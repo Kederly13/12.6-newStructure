@@ -1,0 +1,28 @@
+h2, p {
+    margin: 0;
+}
+
+.todo-item {
+    background-color: bisque;
+}
+
+.todo-item {
+    border: 1px solid black
+}
+
+.input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+  }
+
+
+
+.description {
+    font-size: 20px;
+    color: blue;
+}
+
+
+.title {
+    font-size: 25px;
+}
