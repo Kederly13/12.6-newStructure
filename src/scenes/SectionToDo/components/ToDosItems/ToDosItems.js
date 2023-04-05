@@ -1,28 +1,33 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 import { ToDoItem } from './components/ToDoItem/ToDoItem.js';
 import { todosData } from './data/todosData.js';
 
-const ToDosItems = ({ newTask }) => {
+const ToDosItems = ({ newTask }) => {  
 
-    const archiveTasks = JSON.parse(localStorage.getItem('tasks'));
-    const [toDos, setToDos] = useState(archiveTasks || todosData);
+    const [toDos, setToDos] = useState(todosData);
+    const requestUrl = 'https://jsonplaceholder.typicode.com/todos';
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await axios.get(requestUrl);
+            const filteredData = response.data.filter((({id}) => id <= 8))
+            setToDos(filteredData)
+        };
+        fetchData();
+    }, [requestUrl]);
+
     
     let newTasks = [];
 
-    const setTask = (newTasks) => {
-        localStorage.setItem('tasks', JSON.stringify(newTasks));
-        setToDos(newTasks);
-    };
-
     const deleteItem = (id) => {
         newTasks = [...toDos].filter((task) => task.id !== id)
-        setTask(newTasks)
+        setToDos(newTasks)
     };
 
     const addTask = () => {
         newTasks = [...toDos, newTask]; 
-        setTask(newTasks)
+        setToDos(newTasks)
     };
 
     
@@ -38,7 +43,7 @@ const ToDosItems = ({ newTask }) => {
             return task;
         });
 
-        setTask(newTasks);
+        setToDos(newTasks);
     }
 
     const toDosItems = [...toDos];
@@ -49,11 +54,10 @@ const ToDosItems = ({ newTask }) => {
     useEffect(() => {
         if (newTask) addTask();
     }, [newTask])
-    console.log(toDos)
 
-    const finalTasks = [...activeTasks,...completedTasks].map(({ id, text, completed }) => (
+    const finalTasks = [...activeTasks,...completedTasks].map(({ id, title, completed }) => (
         <ToDoItem
-            description={text}
+            title={title}
             key={id}
             completed={completed}
             setToDos={setToDos}

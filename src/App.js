@@ -1,7 +1,6 @@
 import { Layout } from './components/Layout/Layout.js';
 import { SectionToDo } from './scenes/SectionToDo/SectionToDo.js';
 
-
 function App () {
   return (
     <Layout>

@@ -1,10 +1,9 @@
 import './ToDoItem.css';
 
-const ToDoItem = ({ description, completed, handleChange, deleteItem }) => (
+const ToDoItem = ({ title, completed, handleChange, deleteItem }) => (
     <div className="todo-item">
-        <h2 className='title'>Attention! Headline</h2>
+        <h2 className='title'>{title}</h2>
         <input className='input' type="checkbox" onChange={handleChange} defaultChecked={completed}/>
-        <p className='description'>{description}</p>
         <button onClick={deleteItem} type="button">DELETE</button>       
     </div>
 );

@@ -26,7 +26,7 @@ const SectionToDo = () => {
         setNewTask(
             {
                 id: Math.round(Math.random() * 1000),
-                text: inputValue,
+                title: inputValue,
                 completed: false
             }
         )
