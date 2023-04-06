@@ -7,39 +7,57 @@ import { todosData } from './data/todosData.js';
 const ToDosItems = ({ newTask }) => {  
 
     const [toDos, setToDos] = useState(todosData);
-    const requestUrl = 'https://jsonplaceholder.typicode.com/todos';
+    const requestUrl = 'https://jsonplaceholder.typicode.com/todos/';
+    const changeUrl = 'https://jsonplaceholder.typicode.com/todos/${id}'
+
     useEffect(() => {
         const fetchData = async () => {
-            const response = await axios.get(requestUrl);
-            const filteredData = response.data.filter((({id}) => id <= 8))
-            setToDos(filteredData)
-        };
+            try {
+                const response = await axios.get(requestUrl);
+                const filteredData = response.data.filter(({id}) => id <= 8)
+                setToDos(filteredData);    
+            } catch (error) {
+            console.error(error);
+            }
+        }
         fetchData();
-    }, [requestUrl]);
+    }, []);
 
     
     let newTasks = [];
 
-    const deleteItem = (id) => {
-        newTasks = [...toDos].filter((task) => task.id !== id)
-        setToDos(newTasks)
+  
+
+    const deleteItem = async (id) => {
+        try {
+            await axios.delete(changeUrl)
+            newTasks = [...toDos].filter((task) => task.id !== id)
+            setToDos(newTasks)
+        } catch (error) {
+            console.error(error);
+        }     
     };
 
-    const addTask = () => {
-        newTasks = [...toDos, newTask]; 
-        setToDos(newTasks)
+    const addTask = async () => {
+        try {
+                await axios.post(requestUrl, {
+                id: newTask.id,
+                title: newTask.title,
+                completed: false
+            });
+            newTasks = [...toDos, newTask]; 
+            setToDos(newTasks);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     
     const handleChange = id => {
         newTasks = [...toDos].map((task) => {
             if(task.id === id) {
-                return {
-                    ...task,
-                    completed: !task.completed
-                }
+                return {...task,completed: !task.completed}
             }
-
             return task;
         });
 
